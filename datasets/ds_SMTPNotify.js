@@ -1,28 +1,8 @@
-/**
- *
- * @desc        Envia email através do Fluig conforme template pré cadastrado
- * @copyright   2017 upFlow.me
- * @version     1.0.0
- *
- * @param       {array String} fields - Parâmetros de envio de email
-                                        INDEX0 = Template de email (Ex.: 'PCT_007_INICIO');
-                                        INDEX1 = Assunto do Email (Ex.: '[ePacto] - Teste de Email');
-                                        INDEX2 = Matrícula do remetente do Email (Ex.: 'upflowadmin');
-                                        INDEX3 = Array com a lista dos destinatários (Ex.: ['helbert_campos', 'ana.alice']);
-                                        INDEX4 = Objeto com a lista dos parâmetros (Ex.: {numero:9999,nomelocal:'Nome do Espaço'});
- * @param       {array Constraint} constraints - Não utilizado. Informar null
- * @param       {array String} sortFields - Não utilizado. Informar null
- * @return      {dataset} Retorna o resultado do envio do email
- *
- */
-
 function createDataset(fields, constraints, sortFields) {
-    log.info('uf-log | Chamada do DataSet ds_SMTPNotify.js');
-    
-    var TEMPLATE = "report_notify";
-    var ASSUNTO = "Relatório de Processo"; 
-    var REMETENTE = "admin@brz.eng.br"; 
-    var DESTINATARIOS = "mateusvidal.dev@gmail.com"; 
+    var TEMPLATE = "template_name";
+    var ASSUNTO = "subject"; 
+    var REMETENTE = ""; 
+    var DESTINATARIOS = ""; 
     var PARAMETROS;
     
     var dst = new java.util.ArrayList();   // lista de destinatários
@@ -49,24 +29,12 @@ function createDataset(fields, constraints, sortFields) {
 		PARAMETROS = fields[4];		// parâmetros em JSON via string
 		if (PARAMETROS == undefined) throw 'Informe os dados via String JSON.';
 		PARAMETROS = JSON.parse(PARAMETROS);
-
-        // informativo da chamada no log
-        log.info("uf-log | Dados da chamada ao serviço de email:");
-        log.info("uf-log | CODIGO-TEMPLATE: "+TEMPLATE);
-        log.info("uf-log | ASSUNTO: "+ASSUNTO);
-        log.info("uf-log | MATRICULA-REMETENTE: "+REMETENTE);
-        log.info("uf-log | DESTINATARIOS: "+fields[3]);
-        log.info("uf-log | PARAMETROS: "+fields[4]);
         
         
     } catch(e) {
         return exibeErro('Erro nos parâmetros passados através do fields do DataSet (linha: ' + e.lineNumber + '): '+ e);    // faz a chamada da função que exibe o erro
     }
-    
-	// cria a lista de acordo com o objeto JSON informado
 	try {
-		
-		// faz o loop criando os destinatários
         DESTINATARIOS.forEach(function (matricula) {
             dst.add(matricula);
         });
@@ -115,7 +83,6 @@ function createDataset(fields, constraints, sortFields) {
 function exibeErro(msg) {
     if (msg == null || msg == '') msg = "Erro desconhecido, verifique o log do servidor.";	// se mensagem de erro não foi definida
     var msgErro = "ds_SMTPNotify: " + msg;	// incrementa a mensagem de erro vinda do código
-    log.error('uf-log | '+msgErro);	// grava log no arquivo 'server.log' do JBOSS
     dataset = DatasetBuilder.newDataset();	// cria um novo DataSet para resposta do erro
     dataset.addColumn("ERRO");	// 1=Erro; 0=Sucesso
     dataset.addColumn("MSG");	// coluna com mensagem do erro para exibição ao usuário final
