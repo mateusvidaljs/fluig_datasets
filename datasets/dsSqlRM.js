@@ -13,11 +13,11 @@ function createDataset(fields, constraints, sortFields) {
 	log.info('@ds_generic_rm_sql diz: Inicio');
 	if(validate(fields, constraints) == false) return;
 	
-	var serviceName = 'wsConsultaSqlLocaliza'; /* TOTVS_CONSSQL */ //Serviço criado no ECM para acessar o WebService - JLLE: TOTVS_CONSSQL
+	var serviceName = 'wsConsultaSQL'; /* TOTVS_CONSSQL */ //Serviço criado no ECM para acessar o WebService - JLLE: TOTVS_CONSSQL
 	var servicePackage = 'br.com.totvs.WsConsultaSQL'; //Pacote do serviço
 	var dataset = DatasetBuilder.newDataset();
 	var constraintsValue = '';
-	var connect = DatasetFactory.getDataset('DSConnectorLocaliza', null, null, null);
+	var connect = DatasetFactory.getDataset('dsConnector', null, null, null);
 	var jsonObj = {};
 	
 	//Adiciona as colunas no dataset
